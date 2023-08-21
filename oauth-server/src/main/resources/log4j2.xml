@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+	<Properties>
+		<Property name="basePath">@@INSTALL_DIR@@/JavaAppServer/webapps/dcma#oauth-server/logs/</Property>
+	</Properties>
+
+	<Appenders>
+        <RollingFile name="fileLogger" fileName="${basePath}/app.log"
+                     filePattern="${basePath}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz" append = "true" immediateFlush="true">
+            <!--<PatternLayout>
+                <pattern>{"event":%m}%n</pattern>
+            </PatternLayout>-->
+
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+
+
+        <RollingFile name="OAUTHAUDIT" fileName="${basePath}/oauth-audit.log"
+                     filePattern="${basePath}/$${date:yyyy-MM}/oauth-audit-%d{MM-dd-yyyy}-%i.log.gz" append = "true" immediateFlush="true">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p - %m%n" />
+            <MarkerFilter marker="OAUTHAUDIT" onMatch="ACCEPT" onMismatch="DENY" />
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+
+	</Appenders>
+	<Loggers>
+        <Logger name="com.ephesoft.oauth.server"
+                level="INFO" additivity="false">
+            <AppenderRef ref="OAUTHAUDIT" level="INFO"/>
+            <AppenderRef ref="fileLogger"/>
+        </Logger>
+
+        <!--<Logger name="com.ephesoft.oauth.server"
+                level="INFO" additivity="false">
+            <AppenderRef ref="fileLogger"/>
+            &lt;!&ndash;<AppenderRef ref="CONSOLE"/>&ndash;&gt;
+        </Logger>-->
+
+		<Root level="info" additivity="false">
+			<appender-ref ref="fileLogger" />
+            <appender-ref ref="OAUTHAUDIT" />
+		</Root>
+	</Loggers>
+
+
+</Configuration>

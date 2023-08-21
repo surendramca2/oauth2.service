@@ -1,0 +1,86 @@
+image: maven:3.6.3
+definitions:
+  services:
+    docker:
+      memory: 2048
+  caches:
+    sonar: .sonar/cache
+  steps:
+    - step: &build-shared
+        name: Build transact-oauth-service
+        caches:
+          - maven
+        script:
+          - bash scripts/maven/create-settings.sh
+          - mvn -B -s settings.xml install
+          - RELEASE_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout)
+          - echo $RELEASE_VERSION
+          - echo "export RELEASE_VERSION=$RELEASE_VERSION" >> set_env.sh
+        artifacts:
+          - oauth-server/target/site/**
+          - oauth-server/target/OAuthApi/**
+          - set_env.sh
+    - step: &Upload-dev-build-to-s3
+       name: Upload war to s3
+       image: surendra/aws.powershell.kubernetes
+       script:
+         - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+         - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+         - export BUILD=dev
+         - cat set_env.sh
+         - source set_env.sh
+         - bash scripts/upload_war_to_s3.sh $RELEASE_VERSION
+    - step: &Upload-prod-build-to-s3
+        name: Upload war to s3
+        image: surendra/aws.powershell.kubernetes
+        script:
+          - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+          - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+          - export BUILD=prod
+          - cat set_env.sh
+          - source set_env.sh
+          - bash scripts/upload_war_to_s3.sh $RELEASE_VERSION
+
+pipelines:
+  default:
+    - parallel:
+      - step:
+          name: Build and Test
+          caches:
+            - maven
+          script:
+            - bash scripts/maven/create-settings.sh
+            - mvn -B -s settings.xml install
+          after-script:
+              # Collect checkstyle results, if any, and convert to Bitbucket Code Insights.
+            - pipe: atlassian/checkstyle-report:0.3.0
+      - step:
+          name: Security Scan
+          script:
+            # Run a security scan for sensitive data.
+            # See more security tools at https://bitbucket.org/product/features/pipelines/integrations?&category=security
+            - pipe: atlassian/git-secrets-scan:0.5.1
+  custom:
+    Build transact oAuth Service:
+      - step: *build-shared
+    Upload dev build to s3:
+      - step: *build-shared
+      - step: *Upload-dev-build-to-s3
+    Upload prod build to s3 (master):
+      - step:
+          name: Check Branch
+          script:
+            - if [ "$BITBUCKET_BRANCH" != "master" ] ; then echo "This pipeline can only be triggered on the master branch." && exit 1; fi
+      - step: *build-shared
+      - step: *Upload-prod-build-to-s3
+  pull-requests:
+    '**':
+      - step:
+          name: Build and test a pull-request
+          caches:
+            - maven
+          services:
+            - docker
+          script:
+            - bash scripts/maven/create-settings.sh
+            - mvn -B -s settings.xml install

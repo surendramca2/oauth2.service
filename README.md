@@ -1,2 +1,2 @@
 # oauth2.service
-Oauth2 authentication service
+oauth2 authentication and authorization process 

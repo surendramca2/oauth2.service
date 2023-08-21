@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>pom</packaging>
+	<groupId>com.surendra.oauth.server</groupId>
+	<artifactId>oauth-root</artifactId>
+	<!--This version and oauth-server version in transact.oauth.service\oauth-server\pom.xml should be same to manage versining for transact installer-->
+	<version>0.0.1</version>
+	<name>oauth-root</name>
+	<description>OAUTH Root Model</description>
+	<organization>
+		<name>Document Capture and Mailroom Automation</name>
+		<url>http://www.surendra.com/</url>
+	</organization>
+	<modules>
+		<module>parent</module>
+		<module>oauth-server</module>
+    </modules>
+	<repositories>
+		<repository>
+			<id>transact-thirdparty</id>
+			<url>https://ephesoft.myget.org/F/transact-thirdparty/maven</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>transact-release</id>
+			<url>https://ephesoft.myget.org/F/transact-release/maven/</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>transact-thirdparty</id>
+			<url>https://ephesoft.myget.org/F/transact-thirdparty/maven</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+</project>

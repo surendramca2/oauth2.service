@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <groupId>com.surenndra.oauth.server</groupId>
+    <artifactId>oauth-parent</artifactId>
+    <version>0.0.1</version>
+    <name>OAUTH: Parent</name>
+    <description>OAUTH Parent POM module</description>
+    <properties>
+        <spring.security.version>6.0.1</spring.security.version>
+    </properties>
+    <developers>
+        <developer>
+            <id>Ephesoft</id>
+            <name>Ephesoft</name>
+            <email>enterprise.support@ephesoft.com</email>
+        </developer>
+    </developers>
+    <dependencyManagement>
+         <dependencies>
+         </dependencies>
+    </dependencyManagement>
+
+    <!-- Repositories -->
+    <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <url>http://repo.spring.io/libs-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+			<id>transact-release</id>
+			<url>https://ephesoft.myget.org/F/transact-release/maven/</url>
+		</repository>
+		<repository>
+            <id>transact-thirdparty</id>
+            <url>https://ephesoft.myget.org/F/transact-thirdparty/maven/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>transact-thirdparty</id>
+            <url>https://ephesoft.myget.org/F/transact-thirdparty/maven</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <url>http://repo.spring.io/libs-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/community.ignore</exclude>
+                    <exclude>**/*.community.xml</exclude>
+                    <exclude>**/*.community.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+          </plugins>
+        <pluginManagement>
+            <plugins>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

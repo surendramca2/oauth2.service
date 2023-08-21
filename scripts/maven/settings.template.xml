@@ -1,0 +1,40 @@
+<settings>
+    <servers>
+        <server>
+            <id>com.ephesoft.myget.maven</id>
+            <username>%MYGET_REPO_USERNAME%</username>
+            <password>%MYGET_REPO_PASSWORD%</password>
+        </server>
+        <server>
+            <id>transact-thirdparty</id>
+            <username>%MYGET_REPO_USERNAME%</username>
+            <password>%MYGET_REPO_PASSWORD%</password>
+        </server>
+        <server>
+            <id>transact-release</id>
+            <username>%MYGET_REPO_USERNAME%</username>
+            <password>%MYGET_REPO_PASSWORD%</password>
+        </server>
+        <server>
+            <id>transact-snapshot</id>
+            <username>%MYGET_REPO_USERNAME%</username>
+            <password>%MYGET_REPO_PASSWORD%</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <id>ephesoft</id>
+            <repositories>
+                <repository>
+                    <id>com.ephesoft.myget.maven</id>
+                    <url>https://ephesoft.myget.org/F/ephesoft/maven/</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <activeProfiles>
+        <activeProfile>ephesoft</activeProfile>
+    </activeProfiles>
+</settings>
